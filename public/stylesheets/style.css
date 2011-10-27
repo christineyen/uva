@@ -1,8 +1,52 @@
+/* app-specific overrides of Twitter Boostrap CSS framework */
 body {
   padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
-a {
-  color: #00B7FF;
+.pull-right {
+	position: relative;
+}
+.pull-right span {
+	margin-left: 27px;
+}
+.runkeeper-avatar {
+	position: absolute;
+	height: 20px;
+	width: 20px;
+	margin-top: 10px;
+	margin-left: 5px;
+}
+
+ul.activities {
+  list-style: none;
+  margin: 0;
+}
+ul.activities li {
+  margin-top: 10px;
+}
+ul.activities li > span {
+  display: block;
+}
+ul.activities span.label {
+  float: right;
+}
+ul.activities span.distance {
+  font-size: 1.5em;
+}
+ul.activities span.timing {
+  clear: both;
+  margin-top: 5px;
+}
+ul.activities span.duration {
+  font-weight: bold;
+}
+ul.activities span.starttime {
+  font-style: italic;
+  color: #666;
+}
+
+.footer {
+	margin-top: 17px;
+	padding-top: 17px;
+	border-top: 1px solid #EEE;
 }

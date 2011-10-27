@@ -1,2 +1,35 @@
-h1 returned JSON
-= data
+.topbar
+  .topbar-inner
+    .container-fluid
+      a.brand(href='#') uva
+      ul.nav
+        li.active
+          a(href='#') Calendar
+        li
+          a(href='#') About
+      p.pull-right
+        | Logged in as 
+        img.runkeeper-avatar(src=user['medium_picture'])
+        span= user['name']
+.container-fluid
+  .sidebar
+    .well
+      h2 Activity Feed
+      p Your activities listed out chronologically, below (fake data, while Runkeeper takes its time approving my application)
+      ul.activities
+        each activity in activities
+          li
+            span.label.success= activity['type']
+            span.distance
+              strong= metersToMi(activity['total_distance'])
+              |  miles
+            span.timing
+              span.duration for #{ secondsToHms(activity['duration']) }
+              |  
+              span.pace (#{ pace(activity['total_distance'], activity['duration'])} min/mi)
+            span.starttime= formatTime(activity['start_time'])
+  .content
+    .hero-unit
+      h1 Recent Activities
+      p calendar here
+      img(src='http://placekitten.com/g/400/200')

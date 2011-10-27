@@ -23,6 +23,34 @@ app.configure('development', function() {
 var runkeeper = require('./support/runkeeper/lib/runkeeper');
 var client = new runkeeper.HealthGraph(rkOptions);
 
+var FAKE_ACTIVITY_JSON = ' \
+  { \
+  "size": 40, \
+  "items": \
+  [ { "type": "Running", \
+  "start_time": "Tue, 1 Mar 2011 07:00:00", \
+  "total_distance": 3492.27648, \
+  "duration": 1437, \
+  "uri": "/activities/40" }, \
+  { "type": "Running", \
+  "start_time": "Thu, 3 Mar 2011 07:00:00", \
+  "total_distance": 5310.8352, \
+  "duration": 2278, \
+  "uri": "/activities/39" }, \
+  { "type": "Running", \
+  "start_time": "Sat, 5 Mar 2011 11:00:00", \
+  "total_distance": 12939.1258, \
+  "duration": 5043, \
+  "uri": "/activities/38" }, \
+  { "type": "Running", \
+  "start_time": "Mon, 7 Mar 2011 07:00:00", \
+  "total_distance": 6839.712, \
+  "duration": 2570, \
+  "uri": "/activities/37" }], \
+  "previous": "https://api.runkeeper.com/user/1234567890/activities?page=2&pageSize=4" \
+  } \
+';
+
 function consumer() {
   return new oauth.OAuth2(
     rkOptions.client_id,
@@ -55,14 +83,9 @@ app.configure('production', function(){
 
 // Routes
 app.get('/', function(req, res){
-  if (!req.session.oauth_access_token) {
-    res.redirect('/runkeeper_login');
-  } else {
-    res.redirect('/calendar');
-  }
-  //res.render('index', {
-    //title: 'Express'
-  //});
+  res.render('index', {
+    title: 'Express'
+  });
 });
 
 app.get('/runkeeper_login', function(req, res) {
@@ -75,21 +98,32 @@ app.get('/runkeeper_login', function(req, res) {
 
 app.get('/runkeeper_callback', function(req, res) {
   client.getNewToken(req.param('code'), function(access_token) {
-    client.access_token = access_token;
+    req.session.access_token = access_token
+    client.access_token      = access_token;
     res.redirect('/calendar');
   });
 });
 
 app.get('/calendar', function(req, res) {
-  client.profile(function(data) {
-    console.log('YES YES YES ' + data);
-    //res.send(JSON.parse(data));
+  // Early return in case the access_token isn't set
+  if (!req.session.access_token) {
+    res.redirect('/');
+    return;
+  }
+  // Once the data access request gets approved, pull REAL fitness activities.
+  // For now, we push dummy data.
+  fitnessActivities = JSON.parse(FAKE_ACTIVITY_JSON);
+
+  client.profile(function(profile) {
     res.render('calendar', {
-      title: 'calendar data!',
-      data: data['name']
+      title      : 'calendar data!',
+      user       : JSON.parse(profile),
+      activities : fitnessActivities['items']
     });
   });
 });
+
+app.helpers(require('./helpers.js').helpers);
 
 var port = process.env.PORT || 3000;
 app.listen(port, function() {
