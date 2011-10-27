@@ -2,7 +2,7 @@ METERS_IN_A_MILE = 1609.344
 HOUR             = 3600
 MINUTE           = 60
 
-exports.helpers =
+conversions =
   metersToMi: (meters) ->
     (meters / METERS_IN_A_MILE).toFixed(2)
   secondsToHms: (seconds) ->
@@ -15,11 +15,15 @@ exports.helpers =
     [ hours, minutes, seconds ].join(':')
   formatTime: (rkTimeString) ->
     # Runkeeper hands us times like "Tue, 1 Mar 2011 07:00:00"
-    #
-    # Short of importing datejs / other nice libraries, we'll just regex the
-    # crap out of the default string for now.
-    rkTimeString.replace(/\s\d{4}/, ' at').replace(/, (\d+) (\w+)/, ", $2 $1").replace(/:\d{2}$/, '')
+     # We want to retur ones like "Mar 1, 2011 (Tues) at 01:50AM"
+    Date.parse(rkTimeString).toString('MMM d, yyyy (ddd) @ hh:mmtt')
   pace: (meters, seconds) ->
     minutes = seconds/60
     miles = meters / METERS_IN_A_MILE
     (minutes / miles).toFixed(2)
+
+exports.helpers =
+  metersToMi   : conversions.metersToMi
+  secondsToHms : conversions.secondsToHms
+  formatTime   : conversions.formatTime
+  pace         : conversions.pace

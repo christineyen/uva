@@ -3,6 +3,10 @@ body {
   padding: 50px;
 }
 
+h2.month {
+  text-align: center;
+}
+
 .pull-right {
 	position: relative;
 }
@@ -43,6 +47,25 @@ ul.activities span.duration {
 ul.activities span.starttime {
   font-style: italic;
   color: #666;
+}
+
+table.activityCal th {
+  background-color: #FEFEFE;
+}
+table.activityCal td {
+  height: 3em;
+}
+table.activityCal td.inactive {
+  color: #CCC;
+  background-color: #FAFAFA;
+}
+table.activityCal td.active {
+  background-color: #FEFEFE;
+}
+table.activityCal span.day {
+  float: left;
+  font-size: 0.8em;
+  font-weight: bold;
 }
 
 .footer {

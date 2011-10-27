@@ -9,5 +9,6 @@
     , "node-oauth": "0.1.0"
     , "oauth": "0.9.1"
     , "request": "2.1.1"
+    , "datejs": "0.0.2"
   }
 }

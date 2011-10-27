@@ -32,4 +32,17 @@
     .hero-unit
       h1 Recent Activities
       p calendar here
+      each items, monthName in calData
+        h2.month= monthName
+        table.activityCal
+          thead
+            tr
+              each day in [ 'Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat' ]
+                th= day
+          tbody
+            each cell, i in items
+              if i % 7 == 0
+                tr
+              td(class=cell.class())
+                span.day= cell.day
       img(src='http://placekitten.com/g/400/200')

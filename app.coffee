@@ -1,6 +1,7 @@
 # Module dependencies.
 express = require('express')
-oauth   = require ('oauth')
+oauth   = require('oauth')
+date    = require('datejs')
 
 app = express.createServer()
 
@@ -17,6 +18,7 @@ app.configure('development', ->
 )
 runkeeper = require(__dirname + '/runkeeper.js')
 client    = new runkeeper.HealthGraph(rkOptions)
+calendar  = require(__dirname + '/calendar.coffee')
 
 FAKE_ACTIVITY_JSON = '
   {
@@ -33,12 +35,12 @@ FAKE_ACTIVITY_JSON = '
   "duration": 2278,
   "uri": "/activities/39" },
   { "type": "Running",
-  "start_time": "Sat, 5 Mar 2011 11:00:00",
+  "start_time": "Sat, 9 Apr 2011 11:00:00",
   "total_distance": 12939.1258,
   "duration": 5043,
   "uri": "/activities/38" },
   { "type": "Running",
-  "start_time": "Mon, 7 Mar 2011 07:00:00",
+  "start_time": "Mon, 9 May 2011 07:00:00",
   "total_distance": 6839.712,
   "duration": 2570,
   "uri": "/activities/37" }],
@@ -108,9 +110,10 @@ app.get('/calendar', (req, res) ->
 
   client.profile((profile) ->
     res.render('calendar',
-      title      : 'calendar data!',
-      user       : JSON.parse(profile),
+      title      : 'calendar data!'
       activities : fitnessActivities['items']
+      user       : JSON.parse(profile)
+      calData    : calendar.helpers.getElts(fitnessActivities['items'])
     )
   )
 )
