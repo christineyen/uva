@@ -1,31 +1,89 @@
 /**
  * Module dependencies.
  */
+
+require.paths.push('support/runkeeper/lib');
 var express = require('express');
-var app = module.exports = express.createServer();
+var oauth   = require ('oauth');
+
+var app = express.createServer();
+
+var rkOptions = exports.options = {
+  client_id        : process.env.CLIENT_ID,
+  client_secret    : process.env.CLIENT_SECRET,
+  auth_url         : 'https://runkeeper.com/apps/authorize',
+  access_token_url : 'https://runkeeper.com/apps/token',
+  redirect_uri     : 'http://localhost:3000/runkeeper_callback',
+};
+var runkeeper = require('./support/runkeeper/lib/runkeeper');
+var client = new runkeeper.HealthGraph(rkOptions);
+
+function consumer() {
+  return new oauth.OAuth2(
+    rkOptions.client_id,
+    rkOptions.client_secret,
+    'http://runkeeper.com',
+    '/apps/authorize',
+    '/apps/token');
+}
 
 // Configuration
 app.configure(function(){
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
+  app.use(express.logger());
   app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(app.router);
+  app.use(express.cookieParser());
+  app.use(express.session({
+    secret: 'sdofyi234oglkc@oydf'
+  }))
+  //app.use(app.router);
   app.use(express.static(__dirname + '/public'));
 });
 
 app.configure('development', function(){
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
+  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 });
 
 app.configure('production', function(){
-  app.use(express.errorHandler()); 
+  app.use(express.errorHandler());
 });
 
 // Routes
 app.get('/', function(req, res){
-  res.render('index', {
-    title: 'Express'
+  if (!req.session.oauth_access_token) {
+    res.redirect('/runkeeper_login');
+  } else {
+    res.redirect('/calendar');
+  }
+  //res.render('index', {
+    //title: 'Express'
+  //});
+});
+
+app.get('/runkeeper_login', function(req, res) {
+  var oa = consumer();
+  res.redirect(oa.getAuthorizeUrl({
+    response_type: 'code',
+    redirect_uri : rkOptions.redirect_uri
+  }));
+});
+
+app.get('/runkeeper_callback', function(req, res) {
+  client.getNewToken(req.param('code'), function(access_token) {
+    client.access_token = access_token;
+    res.redirect('/calendar');
+  });
+});
+
+app.get('/calendar', function(req, res) {
+  client.profile(function(data) {
+    console.log('YES YES YES ' + data);
+    //res.send(JSON.parse(data));
+    res.render('calendar', {
+      title: 'calendar data!',
+      data: data['name']
+    });
   });
 });
 
