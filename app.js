@@ -2,7 +2,6 @@
  * Module dependencies.
  */
 
-require.paths.push(__dirname + '/support/runkeeper/lib');
 var express = require('express');
 var oauth   = require ('oauth');
 
@@ -20,7 +19,7 @@ app.configure('development', function() {
   // for the development environment. Happy to receive corrections :)
   rkOptions.redirect_uri = 'http://localhost:3000/runkeeper_callback'
 });
-var runkeeper = require(__dirname + '/support/runkeeper/lib/runkeeper.js');
+var runkeeper = require(__dirname + '/runkeeper.js');
 var client = new runkeeper.HealthGraph(rkOptions);
 
 var FAKE_ACTIVITY_JSON = ' \
