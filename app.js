@@ -20,7 +20,7 @@ app.configure('development', function() {
   // for the development environment. Happy to receive corrections :)
   rkOptions.redirect_uri = 'http://localhost:3000/runkeeper_callback'
 });
-var runkeeper = require('./support/runkeeper/lib/runkeeper');
+var runkeeper = require('./support/runkeeper/lib/runkeeper.js');
 var client = new runkeeper.HealthGraph(rkOptions);
 
 var FAKE_ACTIVITY_JSON = ' \
