@@ -4,6 +4,10 @@
   , "private": true
   , "dependencies": {
       "express": "2.3.12"
-    , "jade": "latest"
+    , "jade": "0.16.4"
+    , "less": "1.1.4"
+    , "node-oauth": "0.1.0"
+    , "oauth": "0.9.1"
+    , "request": "2.1.1"
   }
 }
