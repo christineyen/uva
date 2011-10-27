@@ -13,8 +13,13 @@ var rkOptions = exports.options = {
   client_secret    : process.env.CLIENT_SECRET,
   auth_url         : 'https://runkeeper.com/apps/authorize',
   access_token_url : 'https://runkeeper.com/apps/token',
-  redirect_uri     : 'http://localhost:3000/runkeeper_callback',
+  redirect_uri     : 'http://uva.herokuapp.com/runkeeper_callback',
 };
+app.configure('development', function() {
+  // Not sure if this is kosher, but I want to override the base redirect_uri
+  // for the development environment. Happy to receive corrections :)
+  rkOptions.redirect_uri = 'http://localhost:3000/runkeeper_callback'
+});
 var runkeeper = require('./support/runkeeper/lib/runkeeper');
 var client = new runkeeper.HealthGraph(rkOptions);
 
@@ -37,7 +42,6 @@ app.configure(function(){
   app.use(express.session({
     secret: 'sdofyi234oglkc@oydf'
   }))
-  //app.use(app.router);
   app.use(express.static(__dirname + '/public'));
 });
 
