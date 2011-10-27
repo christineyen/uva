@@ -2,7 +2,7 @@
  * Module dependencies.
  */
 
-require.paths.push('support/runkeeper/lib');
+require.paths.push(__dirname + '/support/runkeeper/lib');
 var express = require('express');
 var oauth   = require ('oauth');
 
@@ -20,7 +20,7 @@ app.configure('development', function() {
   // for the development environment. Happy to receive corrections :)
   rkOptions.redirect_uri = 'http://localhost:3000/runkeeper_callback'
 });
-var runkeeper = require('./support/runkeeper/lib/runkeeper.js');
+var runkeeper = require(__dirname + '/support/runkeeper/lib/runkeeper.js');
 var client = new runkeeper.HealthGraph(rkOptions);
 
 var FAKE_ACTIVITY_JSON = ' \
@@ -123,7 +123,7 @@ app.get('/calendar', function(req, res) {
   });
 });
 
-app.helpers(require('./helpers.js').helpers);
+app.helpers(require(__dirname + '/helpers.js').helpers);
 
 var port = process.env.PORT || 3000;
 app.listen(port, function() {
