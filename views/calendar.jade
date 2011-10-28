@@ -45,4 +45,6 @@
                 tr
               td(class=cell.class())
                 span.day= cell.day
+                each actType in cell.activities()
+                  span.label.success= actType
       img(src='http://placekitten.com/g/400/200')

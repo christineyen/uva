@@ -5,12 +5,19 @@ Cell = (day, isActive) ->
   # 3) .class() - any other strings the frontend should know about,
   #   e.g. 'inactive' and/or 'today.' adds 'hasActivities' by default if
   #   activities().length > 0
-  this.day = day
-  this.active = isActive
+  this.day         = day
+  this.active      = isActive
+  this._activities = []
+  this
 
 Cell.prototype.class = ->
   if this.active then 'active' else 'inactive'
- 
+
+Cell.prototype.addActivity = (activity) ->
+  this._activities.push(activity)
+
+Cell.prototype.activities = ->
+  (act['type'] for act in this._activities)
 
 calendarHelpers =
   _activitiesByMonth: (activities) ->
@@ -62,10 +69,9 @@ calendarHelpers =
         monthCells.push(new Cell(day, false))
 
     # Now we push on activities, indexing into the array by using monthOffset
-    #
-    #
-    #
-    #
+    for act in activities
+      d = Date.parse(act['start_time'])
+      monthCells[(monthOffset - 1) + d.getDate()].addActivity(act)
 
     monthCells
  

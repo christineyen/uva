@@ -2,7 +2,9 @@
   var Cell, calendarHelpers;
   Cell = function(day, isActive) {
     this.day = day;
-    return this.active = isActive;
+    this.active = isActive;
+    this._activities = [];
+    return this;
   };
   Cell.prototype["class"] = function() {
     if (this.active) {
@@ -10,6 +12,19 @@
     } else {
       return 'inactive';
     }
+  };
+  Cell.prototype.addActivity = function(activity) {
+    return this._activities.push(activity);
+  };
+  Cell.prototype.activities = function() {
+    var act, _i, _len, _ref, _results;
+    _ref = this._activities;
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      act = _ref[_i];
+      _results.push(act['type']);
+    }
+    return _results;
   };
   calendarHelpers = {
     _activitiesByMonth: function(activities) {
@@ -29,7 +44,7 @@
       return actByMonth;
     },
     _fillMonth: function(monthStr, activities) {
-      var day, missingNumDays, month, monthCells, monthOffset, prevMoDays, prevMoStart, _ref, _ref2;
+      var act, d, day, missingNumDays, month, monthCells, monthOffset, prevMoDays, prevMoStart, _i, _len, _ref, _ref2;
       monthCells = [];
       month = Date.parse(monthStr);
       monthOffset = month.getDay();
@@ -50,6 +65,11 @@
         for (day = 1, _ref2 = 7 - missingNumDays; 1 <= _ref2 ? day <= _ref2 : day >= _ref2; 1 <= _ref2 ? day++ : day--) {
           monthCells.push(new Cell(day, false));
         }
+      }
+      for (_i = 0, _len = activities.length; _i < _len; _i++) {
+        act = activities[_i];
+        d = Date.parse(act['start_time']);
+        monthCells[(monthOffset - 1) + d.getDate()].addActivity(act);
       }
       return monthCells;
     },
