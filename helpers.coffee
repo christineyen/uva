@@ -14,7 +14,7 @@ conversions =
 
     [ hours, minutes, seconds ].join(':')
   formatTime: (rkTimeString) ->
-    # Runkeeper hands us times like "Tue, 1 Mar 2011 07:00:00"
+    # RunKeeper hands us times like "Tue, 1 Mar 2011 07:00:00"
      # We want to retur ones like "Mar 1, 2011 (Tues) at 01:50AM"
     Date.parse(rkTimeString).toString('MMM d, yyyy (ddd) @ hh:mmtt')
   pace: (meters, seconds) ->

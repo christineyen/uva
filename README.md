@@ -2,7 +2,7 @@
 
 ## About
 
-Just a small app that maps your Runkeeper activities onto a calendar view. Written in node.js as an intellectual / itchy-finger experiment.
+Just a small app that maps your RunKeeper activities onto a calendar view. Written in node.js as an intellectual / itchy-finger experiment.
 
 
 Related:

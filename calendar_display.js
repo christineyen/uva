@@ -37,7 +37,7 @@
   CalendarDisplay = exports.CalendarDisplay = function(activities) {
     /*
       # Handles the partitioning of a raw list of FitnessActivities, provided by
-      # Runkeeper, into days by month and readying the data to be rendered by the
+      # RunKeeper, into days by month and readying the data to be rendered by the
       # frontend.
       */    this._activities = activities;
     return this;
