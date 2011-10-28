@@ -16,7 +16,7 @@
   });
   runkeeper = require(__dirname + '/runkeeper.js');
   client = new runkeeper.HealthGraph(rkOptions);
-  calendar = require(__dirname + '/calendar.coffee');
+  calendar = require(__dirname + '/calendar.js');
   FAKE_ACTIVITY_JSON = '\
   {\
   "size": 40,\
@@ -102,7 +102,7 @@
       });
     });
   });
-  app.helpers(require(__dirname + '/helpers.coffee').helpers);
+  app.helpers(require(__dirname + '/helpers.js').helpers);
   port = process.env.PORT || 3000;
   app.listen(port, function() {
     return console.log("Express server listening on port %d in %s mode", port, app.settings.env);

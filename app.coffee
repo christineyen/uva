@@ -18,7 +18,7 @@ app.configure('development', ->
 )
 runkeeper = require(__dirname + '/runkeeper.js')
 client    = new runkeeper.HealthGraph(rkOptions)
-calendar  = require(__dirname + '/calendar.coffee')
+calendar  = require(__dirname + '/calendar.js')
 
 FAKE_ACTIVITY_JSON = '
   {
@@ -118,7 +118,7 @@ app.get('/calendar', (req, res) ->
   )
 )
 
-app.helpers(require(__dirname + '/helpers.coffee').helpers)
+app.helpers(require(__dirname + '/helpers.js').helpers)
 
 port = process.env.PORT || 3000
 app.listen(port, ->
