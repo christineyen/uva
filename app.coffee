@@ -2,6 +2,9 @@
 express = require('express')
 oauth   = require('oauth')
 date    = require('datejs')
+url     = require('url')
+
+RedisStore = require('connect-redis')(express)
 
 app = express.createServer()
 
@@ -62,25 +65,35 @@ app.configure(->
   app.use(express.logger())
   app.use(express.bodyParser())
   app.use(express.cookieParser())
-  app.use(express.session(
-    secret: 'sdofyi234oglkc@oydf'
-  ))
   app.use(express.static(__dirname + '/public'))
 )
 
 app.configure('development', ->
   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }))
+  app.use(express.session(
+    secret: 'sdofyi234oglkc@oydf'
+  ))
 )
 
 app.configure('production', ->
   app.use(express.errorHandler())
+  redisUrl = url.parse(process.env.REDISTOGO_URL)
+  redisAuth = redisUrl.auth.split(':')
+
+  app.use(express.session(
+    secret: 'sdofyi234oglkc@oydf'
+    store: new RedisStore(
+      host : redisUrl.hostname
+      port : redisUrl.port
+      db   : redisAuth[0]
+      pass : redisAuth[1]
+    )
+  ))
 )
 
 # Routes
 app.get('/', (req, res) ->
-  res.render('index',
-    title: 'Express'
-  )
+  res.render('index')
 )
 
 app.get('/runkeeper_login', (req, res) ->

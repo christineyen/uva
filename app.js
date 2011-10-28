@@ -1,8 +1,10 @@
 (function() {
-  var FAKE_ACTIVITY_JSON, app, calendar, client, consumer, date, express, oauth, port, rkOptions, runkeeper;
+  var FAKE_ACTIVITY_JSON, RedisStore, app, calendar, client, consumer, date, express, oauth, port, rkOptions, runkeeper, url;
   express = require('express');
   oauth = require('oauth');
   date = require('datejs');
+  url = require('url');
+  RedisStore = require('connect-redis')(express);
   app = express.createServer();
   rkOptions = exports.options = {
     client_id: process.env.CLIENT_ID,
@@ -52,24 +54,34 @@
     app.use(express.logger());
     app.use(express.bodyParser());
     app.use(express.cookieParser());
-    app.use(express.session({
-      secret: 'sdofyi234oglkc@oydf'
-    }));
     return app.use(express.static(__dirname + '/public'));
   });
   app.configure('development', function() {
-    return app.use(express.errorHandler({
+    app.use(express.errorHandler({
       dumpExceptions: true,
       showStack: true
     }));
+    return app.use(express.session({
+      secret: 'sdofyi234oglkc@oydf'
+    }));
   });
   app.configure('production', function() {
-    return app.use(express.errorHandler());
+    var redisAuth, redisUrl;
+    app.use(express.errorHandler());
+    redisUrl = url.parse(process.env.REDISTOGO_URL);
+    redisAuth = redisUrl.auth.split(':');
+    return app.use(express.session({
+      secret: 'sdofyi234oglkc@oydf',
+      store: new RedisStore({
+        host: redisUrl.hostname,
+        port: redisUrl.port,
+        db: redisAuth[0],
+        pass: redisAuth[1]
+      })
+    }));
   });
   app.get('/', function(req, res) {
-    return res.render('index', {
-      title: 'Express'
-    });
+    return res.render('index');
   });
   app.get('/runkeeper_login', function(req, res) {
     var oa;
