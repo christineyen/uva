@@ -16,7 +16,7 @@
   });
   runkeeper = require(__dirname + '/runkeeper.js');
   client = new runkeeper.HealthGraph(rkOptions);
-  calendar = require(__dirname + '/calendar.js');
+  calendar = require(__dirname + '/calendar_display.js');
   FAKE_ACTIVITY_JSON = '\
   {\
   "size": 40,\
@@ -92,13 +92,15 @@
       res.redirect('/');
       return;
     }
-    fitnessActivities = JSON.parse(FAKE_ACTIVITY_JSON);
+    fitnessActivities = JSON.parse(FAKE_ACTIVITY_JSON)['items'];
     return client.profile(function(profile) {
+      var calDisplay;
+      calDisplay = new calendar.CalendarDisplay(fitnessActivities);
       return res.render('calendar', {
         title: 'calendar data!',
-        activities: fitnessActivities['items'],
+        activities: fitnessActivities,
         user: JSON.parse(profile),
-        calData: calendar.helpers.getElts(fitnessActivities['items'])
+        calData: calDisplay.getElts()
       });
     });
   });

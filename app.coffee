@@ -16,9 +16,9 @@ app.configure('development', ->
   # for the development environment. Happy to receive corrections :)
   rkOptions.redirect_uri = 'http://localhost:3000/runkeeper_callback'
 )
-runkeeper = require(__dirname + '/runkeeper.js')
-client    = new runkeeper.HealthGraph(rkOptions)
-calendar  = require(__dirname + '/calendar.js')
+runkeeper  = require(__dirname + '/runkeeper.js')
+client     = new runkeeper.HealthGraph(rkOptions)
+calendar   = require(__dirname + '/calendar_display.js')
 
 FAKE_ACTIVITY_JSON = '
   {
@@ -106,14 +106,15 @@ app.get('/calendar', (req, res) ->
     return
   # Once the data access request gets approved, pull REAL fitness activities.
   # For now, we push dummy data.
-  fitnessActivities = JSON.parse(FAKE_ACTIVITY_JSON)
+  fitnessActivities = JSON.parse(FAKE_ACTIVITY_JSON)['items']
 
   client.profile((profile) ->
+    calDisplay = new calendar.CalendarDisplay(fitnessActivities)
     res.render('calendar',
       title      : 'calendar data!'
-      activities : fitnessActivities['items']
+      activities : fitnessActivities
       user       : JSON.parse(profile)
-      calData    : calendar.helpers.getElts(fitnessActivities['items'])
+      calData    : calDisplay.getElts()
     )
   )
 )
