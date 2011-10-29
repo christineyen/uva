@@ -21,14 +21,7 @@
     return this._activities.push(activity);
   };
   Cell.prototype.activities = function() {
-    var act, _i, _len, _ref, _results;
-    _ref = this._activities;
-    _results = [];
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      act = _ref[_i];
-      _results.push(act['type']);
-    }
-    return _results;
+    return this._activities;
   };
   Cell.prototype.toString = function() {
     return "Day: " + this.day + "   Classes: " + (this["class"]()) + "   Activities: " + (this.activities());

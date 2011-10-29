@@ -39,10 +39,15 @@
   "duration": 5043,\
   "uri": "/activities/38" },\
   { "type": "Running",\
+  "start_time": "Sat, 9 Apr 2011 14:00:00",\
+  "total_distance": 2939.1258,\
+  "duration": 3043,\
+  "uri": "/activities/37" },\
+  { "type": "Running",\
   "start_time": "Mon, 9 May 2011 07:00:00",\
   "total_distance": 6839.712,\
   "duration": 2570,\
-  "uri": "/activities/37" }],\
+  "uri": "/activities/36" }],\
   "previous": "https://api.runkeeper.com/user/1234567890/activities?page=2&pageSize=4"\
   }';
   consumer = function() {
@@ -99,20 +104,28 @@
     });
   });
   app.get('/calendar', function(req, res) {
-    var fitnessActivities;
+    var errors, fitnessActivities;
     if (!req.session.access_token) {
       res.redirect('/');
       return;
     }
     fitnessActivities = JSON.parse(FAKE_ACTIVITY_JSON)['items'];
+    errors = [];
     return client.profile(function(profile) {
-      var calDisplay;
+      var calDisplay, profileInfo;
       calDisplay = new calendar.CalendarDisplay(fitnessActivities);
+      profileInfo = {};
+      try {
+        profileInfo = JSON.parse(profile);
+      } catch (error) {
+        errors.push(error);
+      }
       return res.render('calendar', {
         title: 'calendar data!',
         activities: fitnessActivities,
-        user: JSON.parse(profile),
-        calData: calDisplay.getElts()
+        user: profileInfo,
+        calData: calDisplay.getElts(),
+        errors: errors
       });
     });
   });

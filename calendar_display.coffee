@@ -19,7 +19,7 @@ Cell.prototype.addActivity = (activity) ->
   this._activities.push(activity)
 
 Cell.prototype.activities = ->
-  (act['type'] for act in this._activities)
+  this._activities
 
 Cell.prototype.toString = ->
   "Day: #{ this.day }

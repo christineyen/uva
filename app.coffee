@@ -43,10 +43,15 @@ FAKE_ACTIVITY_JSON = '
   "duration": 5043,
   "uri": "/activities/38" },
   { "type": "Running",
+  "start_time": "Sat, 9 Apr 2011 14:00:00",
+  "total_distance": 2939.1258,
+  "duration": 3043,
+  "uri": "/activities/37" },
+  { "type": "Running",
   "start_time": "Mon, 9 May 2011 07:00:00",
   "total_distance": 6839.712,
   "duration": 2570,
-  "uri": "/activities/37" }],
+  "uri": "/activities/36" }],
   "previous": "https://api.runkeeper.com/user/1234567890/activities?page=2&pageSize=4"
   }'
 
@@ -120,14 +125,22 @@ app.get('/calendar', (req, res) ->
   # Once the data access request gets approved, pull REAL fitness activities.
   # For now, we push dummy data.
   fitnessActivities = JSON.parse(FAKE_ACTIVITY_JSON)['items']
+  errors = []
 
   client.profile((profile) ->
     calDisplay = new calendar.CalendarDisplay(fitnessActivities)
+    profileInfo = {}
+    try
+      profileInfo = JSON.parse(profile)
+    catch error
+      errors.push(error)
+
     res.render('calendar',
       title      : 'calendar data!'
       activities : fitnessActivities
-      user       : JSON.parse(profile)
+      user       : profileInfo
       calData    : calDisplay.getElts()
+      errors     : errors
     )
   )
 )

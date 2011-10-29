@@ -54,6 +54,7 @@ table.activityCal th {
 }
 table.activityCal td {
   height: 3em;
+  width: 14%;
 }
 table.activityCal td.inactive {
   color: #CCC;
@@ -62,10 +63,18 @@ table.activityCal td.inactive {
 table.activityCal td.active {
   background-color: #FEFEFE;
 }
+table.activityCal td.hasActivities {
+  background-color: #FFFCE8;
+}
 table.activityCal span.day {
   float: left;
   font-size: 0.8em;
   font-weight: bold;
+  width: 1.5em;
+  height: 100%;
+}
+span.label.success:hover {
+  cursor: pointer
 }
 
 .footer {

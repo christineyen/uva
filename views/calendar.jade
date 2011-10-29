@@ -27,7 +27,7 @@
               span.duration for #{ secondsToHms(activity['duration']) }
               |  
               span.pace (#{ pace(activity['total_distance'], activity['duration'])} min/mi)
-            span.starttime= formatTime(activity['start_time'])
+            span.starttime= formatDateTime(activity['start_time'])
   .content
     .hero-unit
       h1 Recent Activities
@@ -45,6 +45,12 @@
                 tr
               td(class=cell.class())
                 span.day= cell.day
-                each actType in cell.activities()
-                  span.label.success= actType
+                each act in cell.activities()
+                  span.label.success(title=cellToolTip(act))= act['type']
+                  // This line makes sure there're spaces between spans
+                  |  
       img(src='http://placekitten.com/g/400/200')
+script(src='/javascripts/jquery.1.6.4.min.js')
+script(src='/javascripts/bootstrap-twipsy.js')
+script(src='/javascripts/calendar_frontend.js')
+script(type='text/javascript') $(window).load(function() { UVA.cal.init(); })
