@@ -11,10 +11,9 @@
   };
   Cell.prototype["class"] = function() {
     var classes;
-    classes = [];
-    classes << (this.active ? 'active' : 'inactive');
+    classes = this.active ? ['active'] : ['inactive'];
     if (this._activities.length > 0) {
-      classes << 'hasActivities';
+      classes.push('hasActivities');
     }
     return classes.join(' ');
   };

@@ -11,9 +11,8 @@ Cell = (day, isActive) ->
 Cell.prototype.class = ->
   # CSS classes to be passed through to the frontend - a string representation
   # of any important attributes of this Cell.
-  classes = []
-  classes << if this.active then 'active' else 'inactive'
-  classes << 'hasActivities' if this._activities.length > 0
+  classes = if this.active then ['active'] else ['inactive']
+  classes.push('hasActivities') if this._activities.length > 0
   classes.join(' ')
 
 Cell.prototype.addActivity = (activity) ->
