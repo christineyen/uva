@@ -1,16 +1,19 @@
 .topbar
   .topbar-inner
     .container-fluid
-      a.brand(href='#') uva
+      a.brand(href='/calendar') uva (in progress)
       ul.nav
-        li.active
-          a(href='#') Calendar
-        li
-          a(href='#') About
-      p.pull-right
-        | Logged in as 
-        img.runkeeper-avatar(src=user['medium_picture'])
-        span= user['name']
+        li.active: a(href='#') Calendar
+        li: a(href='#') About
+      ul.nav.secondary-nav
+        li.dropdown(data-dropdown='dropdown')
+          a(href='#').dropdown-toggle
+            | Christine
+            //img.runkeeper-avatar(src=user['medium_picture'])
+            //span= user['name']
+          ul.dropdown-menu
+            li: a(href='#') Account
+            li: a(href='#') Logout
 .container-fluid
   .sidebar
     .well
@@ -52,5 +55,6 @@
       img(src='http://placekitten.com/g/400/200')
 script(src='/javascripts/jquery.1.6.4.min.js')
 script(src='/javascripts/bootstrap-twipsy.js')
+script(src='/javascripts/bootstrap-dropdown.js')
 script(src='/javascripts/calendar_frontend.js')
 script(type='text/javascript') $(window).load(function() { UVA.cal.init(); })
