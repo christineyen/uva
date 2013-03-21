@@ -8,9 +8,8 @@
       ul.nav.secondary-nav
         li.dropdown(data-dropdown='dropdown')
           a(href='#').dropdown-toggle
-            | Christine
-            //img.runkeeper-avatar(src=user['medium_picture'])
-            //span= user['name']
+            img.runkeeper-avatar(src=user['medium_picture'])
+            span= user['name']
           ul.dropdown-menu
             li: a(href='#') Account
             li: a(href='#') Logout

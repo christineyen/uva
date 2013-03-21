@@ -23,38 +23,6 @@ runkeeper  = require(__dirname + '/runkeeper.js')
 client     = new runkeeper.HealthGraph(rkOptions)
 calendar   = require(__dirname + '/calendar_display.js')
 
-FAKE_ACTIVITY_JSON = '
-  {
-  "size": 40,
-  "items":
-  [ { "type": "Running",
-  "start_time": "Tue, 1 Mar 2011 07:00:00",
-  "total_distance": 3492.27648,
-  "duration": 1437,
-  "uri": "/activities/40" },
-  { "type": "Running",
-  "start_time": "Thu, 3 Mar 2011 07:00:00",
-  "total_distance": 5310.8352,
-  "duration": 2278,
-  "uri": "/activities/39" },
-  { "type": "Running",
-  "start_time": "Sat, 9 Apr 2011 11:00:00",
-  "total_distance": 12939.1258,
-  "duration": 5043,
-  "uri": "/activities/38" },
-  { "type": "Running",
-  "start_time": "Sat, 9 Apr 2011 14:00:00",
-  "total_distance": 2939.1258,
-  "duration": 3043,
-  "uri": "/activities/37" },
-  { "type": "Running",
-  "start_time": "Mon, 9 May 2011 07:00:00",
-  "total_distance": 6839.712,
-  "duration": 2570,
-  "uri": "/activities/36" }],
-  "previous": "https://api.runkeeper.com/user/1234567890/activities?page=2&pageSize=4"
-  }'
-
 consumer = ->
   new oauth.OAuth2(
     rkOptions.client_id,
@@ -122,26 +90,33 @@ app.get('/calendar', (req, res) ->
   if (!req.session.access_token)
     res.redirect('/')
     return
-  # Once the data access request gets approved, pull REAL fitness activities.
-  # For now, we push dummy data.
-  fitnessActivities = JSON.parse(FAKE_ACTIVITY_JSON)['items']
   errors = []
 
   client.profile((profile) ->
-    calDisplay = new calendar.CalendarDisplay(fitnessActivities)
+    fitnessActivities = []
     profileInfo = {}
     try
       profileInfo = JSON.parse(profile)
     catch error
       errors.push(error)
 
-    res.render('calendar',
-      title      : 'calendar data!'
-      activities : fitnessActivities
-      user       : profileInfo
-      calData    : calDisplay.getElts()
-      errors     : errors
+    client.fitnessActivityFeed((activities) ->
+      try
+        fitnessActivities = JSON.parse(activities)['items']
+        calDisplay = new calendar.CalendarDisplay(fitnessActivities)
+      catch error
+        console.log(error)
+        errors.push(error)
+
+      res.render('calendar',
+        title      : 'calendar data!'
+        activities : fitnessActivities
+        user       : profileInfo
+        calData    : calDisplay.getElts()
+        errors     : errors
+      )
     )
+
   )
 )
 
