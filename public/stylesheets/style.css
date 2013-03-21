@@ -18,6 +18,9 @@ h2.month {
   height: 20px;
   width: 20px;
 }
+img.thumbnail {
+  border: 1px solid #ccc;
+}
 
 ul.activities {
   list-style: none;
