@@ -12,7 +12,7 @@ conversions =
     minutes = Math.floor(seconds / MINUTE)
     seconds -= minutes * MINUTE
 
-    [ hours, minutes, seconds ].join(':')
+    [ hours, minutes, Math.floor(seconds) ].join(':')
   pace: (meters, seconds) ->
     minutes = seconds/60
     miles = meters / METERS_IN_A_MILE
@@ -21,8 +21,8 @@ conversions =
 viewHelpers =
   formatDateTime: (rkTimeString) ->
     # RunKeeper hands us times like "Tue, 1 Mar 2011 07:00:00"
-     # We want to retur ones like "Mar 1, 2011 (Tues) at 01:50AM"
-    Date.parse(rkTimeString).toString('MMM d, yyyy (ddd) @ hh:mmtt')
+     # We want to retur ones like "Mar 1, 2011 (Tues) at 1:50PM"
+    Date.parse(rkTimeString).toString('MMM d, yyyy (ddd) @ h:mmtt')
   formatTimeDuration: (rkTimeString, seconds) ->
     start = Date.parse(rkTimeString)
     end = start.clone().addSeconds(seconds)

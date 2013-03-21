@@ -1,10 +1,10 @@
 .topbar
   .topbar-inner
     .container-fluid
-      a.brand(href='/calendar') uva (in progress)
-      ul.nav
-        li.active: a(href='#') Calendar
-        li: a(href='#') About
+      a.brand(href='/calendar') uva
+      //ul.nav
+        //li.active: a(href='#') Calendar
+        //li: a(href='#') About
       ul.nav.secondary-nav
         li.dropdown(data-dropdown='dropdown')
           a(href='#').dropdown-toggle
@@ -17,7 +17,7 @@
   .sidebar
     .well
       h2 Activity Feed
-      p Your activities listed out chronologically, below (fake data, while RunKeeper takes its time approving my application)
+      p Your activities listed out chronologically, below (just the most recent 25 activities)
       ul.activities
         each activity in activities
           li
@@ -33,7 +33,6 @@
   .content
     .hero-unit
       h1 Recent Activities
-      p calendar here
       each items, monthName in calData
         h2.month= monthName
         table.activityCal
@@ -51,7 +50,6 @@
                   span.label.success(title=cellToolTip(act))= act['type']
                   // This line makes sure there're spaces between spans
                   |  
-      img(src='http://placekitten.com/g/400/200')
 script(src='/javascripts/jquery.1.6.4.min.js')
 script(src='/javascripts/bootstrap-twipsy.js')
 script(src='/javascripts/bootstrap-dropdown.js')

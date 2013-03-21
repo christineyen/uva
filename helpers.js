@@ -13,7 +13,7 @@
       seconds -= hours * HOUR;
       minutes = Math.floor(seconds / MINUTE);
       seconds -= minutes * MINUTE;
-      return [hours, minutes, seconds].join(':');
+      return [hours, minutes, Math.floor(seconds)].join(':');
     },
     pace: function(meters, seconds) {
       var miles, minutes;
@@ -24,7 +24,7 @@
   };
   viewHelpers = {
     formatDateTime: function(rkTimeString) {
-      return Date.parse(rkTimeString).toString('MMM d, yyyy (ddd) @ hh:mmtt');
+      return Date.parse(rkTimeString).toString('MMM d, yyyy (ddd) @ h:mmtt');
     },
     formatTimeDuration: function(rkTimeString, seconds) {
       var end, start;
