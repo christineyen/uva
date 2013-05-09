@@ -3,14 +3,15 @@ express = require('express')
 oauth   = require('oauth')
 date    = require('datejs')
 url     = require('url')
+helpers = require('./helpers').helpers
+# Keys should be a { client_id: '---', client_secret: '---' } Object.
+keys    = require('./keys').keys
 
-RedisStore = require('connect-redis')(express)
-
-app = express.createServer()
+app = express()
 
 rkOptions = exports.options =
-  client_id        : process.env.CLIENT_ID,
-  client_secret    : process.env.CLIENT_SECRET,
+  client_id        : keys.client_id,
+  client_secret    : keys.client_secret,
   auth_url         : 'https://runkeeper.com/apps/authorize',
   access_token_url : 'https://runkeeper.com/apps/token',
   redirect_uri     : 'http://uva.herokuapp.com/runkeeper_callback',
@@ -40,6 +41,7 @@ app.configure(->
   app.use(express.cookieParser())
   app.use(express.static(__dirname + '/public'))
 )
+app.engine('jade', require('jade').__express);
 
 app.configure('development', ->
   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }))
@@ -50,17 +52,8 @@ app.configure('development', ->
 
 app.configure('production', ->
   app.use(express.errorHandler())
-  redisUrl = url.parse(process.env.REDISTOGO_URL)
-  redisAuth = redisUrl.auth.split(':')
-
   app.use(express.session(
     secret: 'sdofyi234oglkc@oydf'
-    store: new RedisStore(
-      host : redisUrl.hostname
-      port : redisUrl.port
-      db   : redisAuth[0]
-      pass : redisAuth[1]
-    )
   ))
 )
 
@@ -114,13 +107,12 @@ app.get('/calendar', (req, res) ->
         user       : profileInfo
         calData    : calDisplay.getElts()
         errors     : errors
+        h          : helpers
       )
     )
 
   )
 )
-
-app.helpers(require(__dirname + '/helpers.js').helpers)
 
 port = process.env.PORT || 3000
 app.listen(port, ->

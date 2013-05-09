@@ -1,57 +1,60 @@
-.topbar
-  .topbar-inner
-    .container-fluid
-      a.brand(href='/calendar') uva
-      //ul.nav
-        //li.active: a(href='#') Calendar
-        //li: a(href='#') About
-      ul.nav.secondary-nav
-        li.dropdown(data-dropdown='dropdown')
-          a(href='#').dropdown-toggle
-            img.runkeeper-avatar(src=user['medium_picture'])
-            span= user['name']
-          ul.dropdown-menu
-            li: a(href='#') Account
-            li: a(href='#') Logout
-.container-fluid
-  .sidebar
-    .well
-      h2 Activity Feed
-      p Your activities listed out chronologically, below (just the most recent 25 activities)
-      ul.activities
-        each activity in activities
-          li
-            span.label.success= activity['type']
-            span.distance
-              strong= metersToMi(activity['total_distance'])
-              |  miles
-            span.timing
-              span.duration for #{ secondsToHms(activity['duration']) }
-              |  
-              span.pace (#{ pace(activity['total_distance'], activity['duration'])} min/mi)
-            span.starttime= formatDateTime(activity['start_time'])
-  .content
-    .hero-unit
-      h1 Recent Activities
-      each items, monthName in calData
-        h2.month= monthName
-        table.activityCal
-          thead
-            tr
-              each day in [ 'Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat' ]
-                th= day
-          tbody
-            each cell, i in items
-              if i % 7 == 0
-                tr
-              td(class=cell.class())
-                span.day= cell.day
-                each act in cell.activities()
-                  span.label.success(title=cellToolTip(act))= act['type']
-                  // This line makes sure there're spaces between spans
-                  |  
-script(src='/javascripts/jquery.1.6.4.min.js')
-script(src='/javascripts/bootstrap-twipsy.js')
-script(src='/javascripts/bootstrap-dropdown.js')
-script(src='/javascripts/calendar_frontend.js')
-script(type='text/javascript') $(window).load(function() { UVA.cal.init(); })
+extends layout
+
+block content
+  .topbar
+    .topbar-inner
+      .container-fluid
+        a.brand(href='/calendar') uva
+        //ul.nav
+          //li.active: a(href='#') Calendar
+          //li: a(href='#') About
+        ul.nav.secondary-nav
+          li.dropdown(data-dropdown='dropdown')
+            a(href='#').dropdown-toggle
+              img.runkeeper-avatar(src=user['medium_picture'])
+              span= user['name']
+            ul.dropdown-menu
+              li: a(href='#') Account
+              li: a(href='#') Logout
+  .container-fluid
+    .sidebar
+      .well
+        h2 Activity Feed
+        p Your activities listed out chronologically, below (just the most recent 25 activities)
+        ul.activities
+          each activity in activities
+            li
+              span.label.success= activity['type']
+              span.distance
+                strong= h.metersToMi(activity['total_distance'])
+                |  miles
+              span.timing
+                span.duration for #{ h.secondsToHms(activity['duration']) }
+                |  
+                span.pace (#{ h.pace(activity['total_distance'], activity['duration'])} min/mi)
+              span.starttime= h.formatDateTime(activity['start_time'])
+    .content
+      .hero-unit
+        h1 Recent Activities
+        each items, monthName in calData
+          h2.month= monthName
+          table.activityCal
+            thead
+              tr
+                each day in [ 'Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat' ]
+                  th= day
+            tbody
+              each cell, i in items
+                if i % 7 == 0
+                  tr
+                td(class=cell.class())
+                  span.day= cell.day
+                  each act in cell.activities()
+                    span.label.success(title=h.cellToolTip(act))= act['type']
+                    // This line makes sure there're spaces between spans
+                    |  
+  script(src='/javascripts/jquery.1.6.4.min.js')
+  script(src='/javascripts/bootstrap-twipsy.js')
+  script(src='/javascripts/bootstrap-dropdown.js')
+  script(src='/javascripts/calendar_frontend.js')
+  script(type='text/javascript') $(window).load(function() { UVA.cal.init(); })
