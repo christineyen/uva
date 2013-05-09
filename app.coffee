@@ -2,14 +2,12 @@
 express = require('express')
 oauth   = require('oauth')
 helpers = require('./helpers').helpers
-# Keys should be a { client_id: '---', client_secret: '---' } Object.
-keys    = require('./keys').keys
 
 app = express()
 
 rkOptions = exports.options =
-  client_id        : keys.client_id,
-  client_secret    : keys.client_secret,
+  client_id        : process.env.CLIENT_ID,
+  client_secret    : process.env.CLIENT_SECRET,
   auth_url         : 'https://runkeeper.com/apps/authorize',
   access_token_url : 'https://runkeeper.com/apps/token',
   redirect_uri     : 'http://uva.herokuapp.com/runkeeper_callback',
@@ -39,7 +37,7 @@ app.configure(->
   app.use(express.cookieParser())
   app.use(express.static(__dirname + '/public'))
 )
-app.engine('jade', require('jade').__express);
+app.engine('jade', require('jade').__express)
 
 app.configure('development', ->
   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }))
