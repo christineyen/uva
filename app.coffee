@@ -1,8 +1,6 @@
 # Module dependencies.
 express = require('express')
 oauth   = require('oauth')
-date    = require('datejs')
-url     = require('url')
 helpers = require('./helpers').helpers
 # Keys should be a { client_id: '---', client_secret: '---' } Object.
 keys    = require('./keys').keys

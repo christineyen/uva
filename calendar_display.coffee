@@ -1,3 +1,5 @@
+moment  = require('moment')
+
 Cell = (day, isActive) ->
   ###
   # Each Cell represents a square in a calendar. This is a class for the purpose
@@ -41,8 +43,7 @@ CalendarDisplay.prototype._activitiesByMonth = ->
   #     values (containing the original activities, partitioned by month)
   actByMonth = {}
   for act in this._activities
-    d = Date.parse(act['start_time'])
-    monthKey = d.toString('MMMM yyyy')
+    monthKey = moment(act['start_time']).format('MMMM YYYY')
 
     actByMonth[monthKey] ?= []
     actByMonth[monthKey].push(act)
@@ -55,23 +56,23 @@ CalendarDisplay.prototype._fillMonth = (monthStr, activities) ->
   #     Includes "inactive" Cells to represent days of other months.
 
   # month is the first day of the month represented by monthStr
-  month       = Date.parse(monthStr)
-  monthOffset = month.getDay()
+  month       = moment(monthStr)
+  monthOffset = month.date()
 
   monthCells  = []
   # handle days of previous month - prepend month.getDay() days
   # e.g. if month starts on a Tuesday, getDay() is 2 - so if the previous
   #   month was January, we prepend [30..31]
   if monthOffset > 0
-    month.addMonths(-1)
-    prevMoDays  = Date.getDaysInMonth(month.getFullYear(), month.getMonth())
+    month.subtract('months', 1)
+    prevMoDays  = month.daysInMonth()
     prevMoStart = prevMoDays - (monthOffset - 1)
     for day in [ prevMoStart .. prevMoDays ]
       monthCells.push(new Cell(day, false))
-    month.addMonths(1)
+    month.add('months', 1)
 
   # Now the current month
-  for day in [ 1 .. Date.getDaysInMonth(month.getFullYear(), month.getMonth()) ]
+  for day in [ 1 .. month.daysInMonth() ]
     monthCells.push(new Cell(day, true))
 
   # Now the next month, if necessary
@@ -82,8 +83,8 @@ CalendarDisplay.prototype._fillMonth = (monthStr, activities) ->
 
   # Now we push on activities, indexing into the array by using monthOffset
   for act in activities
-    d = Date.parse(act['start_time'])
-    monthCells[(monthOffset - 1) + d.getDate()].addActivity(act)
+    d = moment(act['start_time'])
+    monthCells[(monthOffset - 1) + d.date()].addActivity(act)
   monthCells
 
 CalendarDisplay.prototype.getElts = ->

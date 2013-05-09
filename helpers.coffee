@@ -1,3 +1,5 @@
+moment  = require('moment')
+
 METERS_IN_A_MILE = 1609.344
 HOUR             = 3600
 MINUTE           = 60
@@ -22,11 +24,11 @@ viewHelpers =
   formatDateTime: (rkTimeString) ->
     # RunKeeper hands us times like "Tue, 1 Mar 2011 07:00:00"
      # We want to retur ones like "Mar 1, 2011 (Tues) at 1:50PM"
-    Date.parse(rkTimeString).toString('MMM d, yyyy (ddd) @ h:mmtt')
+    moment(rkTimeString).format('MMM d, YYYY (ddd) @ h:mmA')
   formatTimeDuration: (rkTimeString, seconds) ->
-    start = Date.parse(rkTimeString)
-    end = start.clone().addSeconds(seconds)
-    start.toString('hh:mmtt') + ' - ' + end.toString('hh:mmtt')
+    start = moment(rkTimeString)
+    end = start.clone().add('seconds', seconds)
+    start.format('hh:mmA') + ' - ' + end.format('hh:mmA')
   cellToolTip: (act) ->
     dist = act['total_distance']
     dur  = act['duration']
