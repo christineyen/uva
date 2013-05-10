@@ -51,7 +51,7 @@
     var act, actByMonth, monthKey, _i, _len, _ref, _ref1;
 
     actByMonth = {};
-    _ref = this._activities;
+    _ref = this._activities.reverse();
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       act = _ref[_i];
       monthKey = moment(act['start_time']).format('MMMM YYYY');

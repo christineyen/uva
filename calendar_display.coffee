@@ -42,7 +42,7 @@ CalendarDisplay.prototype._activitiesByMonth = ->
   # returns: a dictionary with 'month' keys (e.g. "March 2011") and array
   #     values (containing the original activities, partitioned by month)
   actByMonth = {}
-  for act in this._activities
+  for act in this._activities.reverse()
     monthKey = moment(act['start_time']).format('MMMM YYYY')
 
     actByMonth[monthKey] ?= []
