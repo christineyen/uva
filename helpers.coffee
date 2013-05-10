@@ -37,6 +37,8 @@ viewHelpers =
     tips.push("#{ conversions.metersToMi(dist) } miles (#{ conversions.pace(dist, dur) } min/mi)")
     tips.push(viewHelpers.formatTimeDuration(act['start_time'], act['duration']))
     tips.join('<br/>')
+  monthToClassName: (monthName) ->
+    monthName.replace(/\s/, '').toLowerCase()
 
 exports.helpers =
   metersToMi     : conversions.metersToMi
@@ -45,3 +47,4 @@ exports.helpers =
   formatTime     : viewHelpers.formatTime
   cellToolTip    : viewHelpers.cellToolTip
   pace           : conversions.pace
+  monthToClassName : viewHelpers.monthToClassName

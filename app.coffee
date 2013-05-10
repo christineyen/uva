@@ -99,8 +99,8 @@ app.get('/calendar', (req, res) ->
 
       res.render('calendar',
         title      : 'calendar data!'
-        activities : fitnessActivities
         user       : profileInfo
+        activities : calDisplay.activitiesByMonth()
         calData    : calDisplay.getElts()
         errors     : errors
         h          : helpers

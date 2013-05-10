@@ -52,6 +52,9 @@
       tips.push("" + (conversions.metersToMi(dist)) + " miles (" + (conversions.pace(dist, dur)) + " min/mi)");
       tips.push(viewHelpers.formatTimeDuration(act['start_time'], act['duration']));
       return tips.join('<br/>');
+    },
+    monthToClassName: function(monthName) {
+      return monthName.replace(/\s/, '').toLowerCase();
     }
   };
 
@@ -61,7 +64,8 @@
     formatDateTime: viewHelpers.formatDateTime,
     formatTime: viewHelpers.formatTime,
     cellToolTip: viewHelpers.cellToolTip,
-    pace: conversions.pace
+    pace: conversions.pace,
+    monthToClassName: viewHelpers.monthToClassName
   };
 
 }).call(this);

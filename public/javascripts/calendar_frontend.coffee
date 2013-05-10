@@ -5,12 +5,16 @@
 window.UVA = {}
 
 UVA.cal = (->
-  showPrevious = ->
-    $monthContainer = $('.monthContainer:visible').first()
+  showPreviousByMonthDiv = (a, containerDivName) ->
+    $monthContainer = $(containerDivName + ' .monthContainer:visible').first()
     $prevMonth = $monthContainer.prev('.monthContainer')
     $prevMonth.show()
     if ($('.monthContainer:hidden').length == 0)
-      $(this).hide()
+      $(a).hide()
+
+  showPrevious = ->
+    showPreviousByMonthDiv(this, '.content')
+    showPreviousByMonthDiv(this, '.sidebar')
     return false
 
   init = ->

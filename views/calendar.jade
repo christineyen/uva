@@ -14,23 +14,25 @@ block content
         h2 Activity Feed
         p Your activities listed out chronologically, below (just the most recent 25 activities)
         ul.activities
-          each activity in activities
-            li
-              span.label.success= activity['type']
-              span.distance
-                strong= h.metersToMi(activity['total_distance'])
-                |  miles
-              span.timing
-                span.duration for #{ h.secondsToHms(activity['duration']) }
-                |  
-                span.pace (#{ h.pace(activity['total_distance'], activity['duration'])} min/mi)
-              span.starttime= h.formatDateTime(activity['start_time'])
+          each items, monthName in activities
+            div.monthContainer(class=h.monthToClassName(monthName))
+              each activity in items
+                li
+                  span.label.success= activity['type']
+                  span.distance
+                    strong= h.metersToMi(activity['total_distance'])
+                    |  miles
+                  span.timing
+                    span.duration for #{ h.secondsToHms(activity['duration']) }
+                    |  
+                    span.pace (#{ h.pace(activity['total_distance'], activity['duration'])} min/mi)
+                  span.starttime= h.formatDateTime(activity['start_time'])
     .content
       .hero-unit
         h1 Recent Activities
         a#showPreviousMonth(href='#') SHOW PREVIOUS MONTHS ^
         each items, monthName in calData
-          div.monthContainer
+          div.monthContainer(class=h.monthToClassName(monthName))
             h2.month= monthName
             table.activityCal
               thead

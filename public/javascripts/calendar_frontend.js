@@ -8,17 +8,21 @@
   window.UVA = {};
 
   UVA.cal = (function() {
-    var init, showPrevious;
+    var init, showPrevious, showPreviousByMonthDiv;
 
-    showPrevious = function() {
+    showPreviousByMonthDiv = function(a, containerDivName) {
       var $monthContainer, $prevMonth;
 
-      $monthContainer = $('.monthContainer:visible').first();
+      $monthContainer = $(containerDivName + ' .monthContainer:visible').first();
       $prevMonth = $monthContainer.prev('.monthContainer');
       $prevMonth.show();
       if ($('.monthContainer:hidden').length === 0) {
-        $(this).hide();
+        return $(a).hide();
       }
+    };
+    showPrevious = function() {
+      showPreviousByMonthDiv(this, '.content');
+      showPreviousByMonthDiv(this, '.sidebar');
       return false;
     };
     init = function() {

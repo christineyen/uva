@@ -43,15 +43,15 @@
     # RunKeeper, into days by month and readying the data to be rendered by the
     # frontend.
     */
-    this._activities = activities;
+    this._activities = activities.reverse();
     return this;
   };
 
-  CalendarDisplay.prototype._activitiesByMonth = function() {
+  CalendarDisplay.prototype.activitiesByMonth = function() {
     var act, actByMonth, monthKey, _i, _len, _ref, _ref1;
 
     actByMonth = {};
-    _ref = this._activities.reverse();
+    _ref = this._activities;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       act = _ref[_i];
       monthKey = moment(act['start_time']).format('MMMM YYYY');
@@ -98,7 +98,7 @@
   CalendarDisplay.prototype.getElts = function() {
     var actByMonth, activities, monthName;
 
-    actByMonth = this._activitiesByMonth();
+    actByMonth = this.activitiesByMonth();
     for (monthName in actByMonth) {
       activities = actByMonth[monthName];
       actByMonth[monthName] = this._fillMonth(monthName, activities);

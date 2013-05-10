@@ -34,15 +34,15 @@ CalendarDisplay = exports.CalendarDisplay = (activities) ->
   # RunKeeper, into days by month and readying the data to be rendered by the
   # frontend.
   ###
-  this._activities = activities
+  this._activities = activities.reverse()
   this
 
-CalendarDisplay.prototype._activitiesByMonth = ->
+CalendarDisplay.prototype.activitiesByMonth = ->
   # @param: activities - a bunch of JSON objects with start_time parameters
   # returns: a dictionary with 'month' keys (e.g. "March 2011") and array
   #     values (containing the original activities, partitioned by month)
   actByMonth = {}
-  for act in this._activities.reverse()
+  for act in this._activities
     monthKey = moment(act['start_time']).format('MMMM YYYY')
 
     actByMonth[monthKey] ?= []
@@ -95,7 +95,7 @@ CalendarDisplay.prototype.getElts = ->
   #     for each month.
 
   # Step 1: break activities into groups by month
-  actByMonth = this._activitiesByMonth()
+  actByMonth = this.activitiesByMonth()
 
   # Step 2: pass each month's worth of activities into a "filler" step, where
   # the month's days are generated and populated with relevant activities
