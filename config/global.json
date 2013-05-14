@@ -1,0 +1,14 @@
+{
+    "applications": {
+        "_default": {
+            "link": "runkeeper"
+        }, 
+        "runkeeper": {
+            "applicationId": "rdU1ZgHpq8VVbJa78S4yTB3INFQzKgTSdJU87h4U", 
+            "masterKey": "DRQ4eK00s2FW33oJ9cE9Z0dYV8hrHl92ODwL97RY"
+        }
+    }, 
+    "global": {
+        "parseVersion": "1.2.7"
+    }
+}
