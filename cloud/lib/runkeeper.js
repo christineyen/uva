@@ -7,8 +7,7 @@
  * author: Mark Soper (masoper@gmail.com)
  */
 
-var request = require('request'),
-    API = {
+var API = {
       "user":
         {"media_type": "application/vnd.com.runkeeper.User+json",
          "uri": "/user"},
@@ -64,20 +63,24 @@ HealthGraph.prototype.getNewToken = function (authorization_code, callback) {
     var request_details = {
       method: "POST",
       headers: {'content-type' : 'application/x-www-form-urlencoded'},
-      uri: this.access_token_url,
-      body: body_string
+      url: this.access_token_url,
+      body: body_string,
+      success: function(httpResponse) {
+        console.log("POST " + request_details['url'] + "\n");
+        console.log("RESPONSE\n" + httpResponse);
+        console.log("BODY\n" + httpResponse.text);
+        callback(JSON.parse(httpResponse.text)['access_token']);
+      },
+      error: function(httpResponse) {
+        console.log("POST " + request_details['url'] + "\n");
+        console.log("ERROR\n" + httpResponse.text);
+        callback(JSON.parse(httpResponse.text)['access_token']);
+      }
     };
 
     console.log(request_details['method'] + " " + request_details['uri'] + "\n body: \n" + body_string);
 
-    request(request_details,
-      function(error, response, body) {
-        console.log(request_details['method'] + " " + request_details['uri'] + "\n");
-        console.log("ERROR\n" + error);
-        console.log("RESPONSE\n" + response);
-        console.log("BODY\n" + body);
-        callback(JSON.parse(body)['access_token']);
-      });
+    Parse.Cloud.httpRequest(request_details);
 };
 
 for (func_name in API) {
@@ -90,17 +93,21 @@ for (func_name in API) {
             method: API[func_name]['method'] || 'GET',
             headers: {'Accept': API[func_name]['media_type'],
                 'Authorization' : 'Bearer ' + this.access_token},
-            uri: "https://" + this.api_domain + API[func_name]['uri']
+            url: "https://" + this.api_domain + API[func_name]['uri'],
+            success: function(httpResponse) {
+              console.log("POST " + request_details['url'] + "\n");
+              console.log("RESPONSE\n" + httpResponse);
+              console.log("BODY\n" + httpResponse.text);
+              callback(body);
+            },
+            error: function(httpResponse) {
+              console.log("POST " + request_details['url'] + "\n");
+              console.log("ERROR\n" + httpResponse.text);
+              callback(body);
+            }
         };
 
-        request(request_details,
-          function(error, response, body) {
-              console.log(request_details['method'] + " " + request_details['uri'] + "\n");
-              console.log("ERROR\n" + error);
-              console.log("RESPONSE\n" + response);
-              console.log("BODY\n" + body);
-              callback(body);
-        });
+        Parse.Cloud.httpRequest(request_details);
       };
   })(func_name);
 };

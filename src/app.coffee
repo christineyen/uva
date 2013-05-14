@@ -1,24 +1,25 @@
 # Module dependencies.
 express = require('express')
-oauth   = require('oauth')
-helpers = require('./helpers').helpers
+oauth   = require('cloud/lib/oauth2.js')
+helpers = require('cloud/helpers.js').helpers
+keys    = require('cloud/keys.js').keys
 
 app = express()
 
 rkOptions = exports.options =
-  client_id        : process.env.CLIENT_ID,
-  client_secret    : process.env.CLIENT_SECRET,
+  client_id        : keys.client_id,
+  client_secret    : keys.client_secret,
   auth_url         : 'https://runkeeper.com/apps/authorize',
   access_token_url : 'https://runkeeper.com/apps/token',
-  redirect_uri     : 'http://uva.herokuapp.com/runkeeper_callback',
+  redirect_uri     : 'http://runkeeper.parseapp.com/runkeeper_callback',
 app.configure('development', ->
   # Not sure if this is kosher, but I want to override the base redirect_uri
   # for the development environment. Happy to receive corrections :)
   rkOptions.redirect_uri = 'http://localhost:3000/runkeeper_callback'
 )
-runkeeper  = require(__dirname + '/runkeeper.js')
+runkeeper  = require('cloud/lib/runkeeper.js')
 client     = new runkeeper.HealthGraph(rkOptions)
-calendar   = require(__dirname + '/calendar_display.js')
+calendar   = require('cloud/calendar_display.js')
 
 consumer = ->
   new oauth.OAuth2(
@@ -30,12 +31,12 @@ consumer = ->
 
 # Configuration
 app.configure(->
-  app.set('views', __dirname + '/views')
+  app.set('views', 'cloud/views')
   app.set('view engine', 'jade')
-  app.use(express.logger())
+  #app.use(express.logger())
   app.use(express.bodyParser())
   app.use(express.cookieParser())
-  app.use(express.static(__dirname + '/public'))
+  #app.use(express.static(+ '/public'))
 )
 app.engine('jade', require('jade').__express)
 
@@ -67,6 +68,8 @@ app.get('/runkeeper_login', (req, res) ->
 )
 
 app.get('/runkeeper_callback', (req, res) ->
+  console.log('####### callback')
+  console.log(req.param)
   client.getNewToken(req.param('code'), (access_token) ->
     req.session.access_token = access_token
     client.access_token      = access_token
@@ -110,7 +113,8 @@ app.get('/calendar', (req, res) ->
   )
 )
 
-port = process.env.PORT || 3000
-app.listen(port, ->
-  console.log("Express server listening on port %d in %s mode", port, app.settings.env)
-)
+#port = process.env.PORT || 3000
+#app.listen(port, ->
+  #console.log("Express server listening on port %d in %s mode", port, app.settings.env)
+#)
+app.listen()
