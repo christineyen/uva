@@ -57,7 +57,7 @@ CalendarDisplay.prototype._fillMonth = (monthStr, activities) ->
 
   # month is the first day of the month represented by monthStr
   month       = moment(monthStr)
-  monthOffset = month.date()
+  monthOffset = month.day()
 
   monthCells  = []
   # handle days of previous month - prepend month.getDay() days

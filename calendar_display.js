@@ -67,7 +67,7 @@
     var act, d, day, missingNumDays, month, monthCells, monthOffset, prevMoDays, prevMoStart, _i, _j, _k, _l, _len, _ref, _ref1;
 
     month = moment(monthStr);
-    monthOffset = month.date();
+    monthOffset = month.day();
     monthCells = [];
     if (monthOffset > 0) {
       month.subtract('months', 1);
