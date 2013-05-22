@@ -9,16 +9,19 @@ conversions =
     (meters / METERS_IN_A_MILE).toFixed(2)
   secondsToHms: (seconds) ->
     hours = Math.floor(seconds / HOUR)
-    seconds -= hours * HOUR
-
+    seconds = seconds % HOUR
     minutes = Math.floor(seconds / MINUTE)
-    seconds -= minutes * MINUTE
+    seconds = Math.floor(seconds % MINUTE)
 
-    [ hours, minutes, Math.floor(seconds) ].join(':')
-  pace: (meters, seconds) ->
-    minutes = seconds/60
+    minutes = '0' + minutes if minutes < 10
+    seconds = '0' + seconds if seconds < 10
+    strParts = [ minutes, seconds ]
+
+    strParts.unshift(hours) if hours > 0
+    strParts.join(':')
+conversions['pace'] = (meters, seconds) ->
     miles = meters / METERS_IN_A_MILE
-    (minutes / miles).toFixed(2)
+    this.secondsToHms(seconds / miles)
 
 viewHelpers =
   formatDateTime: (rkTimeString) ->

@@ -15,21 +15,31 @@
       return (meters / METERS_IN_A_MILE).toFixed(2);
     },
     secondsToHms: function(seconds) {
-      var hours, minutes;
+      var hours, minutes, strParts;
 
       hours = Math.floor(seconds / HOUR);
-      seconds -= hours * HOUR;
+      seconds = seconds % HOUR;
       minutes = Math.floor(seconds / MINUTE);
-      seconds -= minutes * MINUTE;
-      return [hours, minutes, Math.floor(seconds)].join(':');
-    },
-    pace: function(meters, seconds) {
-      var miles, minutes;
-
-      minutes = seconds / 60;
-      miles = meters / METERS_IN_A_MILE;
-      return (minutes / miles).toFixed(2);
+      seconds = Math.floor(seconds % MINUTE);
+      if (minutes < 10) {
+        minutes = '0' + minutes;
+      }
+      if (seconds < 10) {
+        seconds = '0' + seconds;
+      }
+      strParts = [minutes, seconds];
+      if (hours > 0) {
+        strParts.unshift(hours);
+      }
+      return strParts.join(':');
     }
+  };
+
+  conversions['pace'] = function(meters, seconds) {
+    var miles;
+
+    miles = meters / METERS_IN_A_MILE;
+    return this.secondsToHms(seconds / miles);
   };
 
   viewHelpers = {
