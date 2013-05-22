@@ -34,7 +34,7 @@
 
   viewHelpers = {
     formatDateTime: function(rkTimeString) {
-      return moment(rkTimeString).format('MMM d, YYYY (ddd) @ h:mmA');
+      return moment(rkTimeString).format('MMM D, YYYY (ddd) @ h:mmA');
     },
     formatTimeDuration: function(rkTimeString, seconds) {
       var end, start;
