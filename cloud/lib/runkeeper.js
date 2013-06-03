@@ -87,23 +87,25 @@ for (func_name in API) {
     console.log("generating function HealthGraph." + func_name);
 
     HealthGraph.prototype[func_name] = (function(func_name) {
-      return function(callback) {
+      return function(access_token, callback) {
         console.log("This method is -- " + func_name);
         var request_details = {
             method: API[func_name]['method'] || 'GET',
-            headers: {'Accept': API[func_name]['media_type'],
-                'Authorization' : 'Bearer ' + this.access_token},
+            headers: {
+              'Accept': API[func_name]['media_type'],
+              'Authorization' : 'Bearer ' + access_token
+              },
             url: "https://" + this.api_domain + API[func_name]['uri'],
             success: function(httpResponse) {
               console.log("POST " + request_details['url'] + "\n");
               console.log("RESPONSE\n" + httpResponse);
               console.log("BODY\n" + httpResponse.text);
-              callback(body);
+              callback(httpResponse.text);
             },
             error: function(httpResponse) {
               console.log("POST " + request_details['url'] + "\n");
               console.log("ERROR\n" + httpResponse.text);
-              callback(body);
+              callback(httpResponse.text);
             }
         };
 

@@ -81,24 +81,27 @@ app.get('/runkeeper_callback', (req, res) ->
 app.get('/calendar', (req, res) ->
   # Early return in case the access_token isn't set
   if (!req.session.access_token)
+    console.log('####### access token is NOT set??')
     res.redirect('/')
     return
+
   errors = []
 
-  client.profile((profile) ->
+  client.profile(req.session.access_token, (profile) ->
     fitnessActivities = []
     profileInfo = {}
     try
       profileInfo = JSON.parse(profile)
     catch error
+      console.log('got error in profile: ' + error)
       errors.push(error)
 
-    client.fitnessActivityFeed((activities) ->
+    client.fitnessActivityFeed(req.session.access_token, (activities) ->
       try
         fitnessActivities = JSON.parse(activities)['items']
         calDisplay = new calendar.CalendarDisplay(fitnessActivities)
       catch error
-        console.log(error)
+        console.log('got error in fitnessActivityFeed: ' + error)
         errors.push(error)
 
       res.render('calendar',
