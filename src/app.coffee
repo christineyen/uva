@@ -36,6 +36,7 @@ app.configure(->
   #app.use(express.logger())
   app.use(express.bodyParser())
   app.use(express.cookieParser())
+  app.use(express.cookieSession({ secret: '123456789QWERTYPARSE' }))
   #app.use(express.static(+ '/public'))
 )
 app.engine('jade', require('jade').__express)
@@ -68,9 +69,9 @@ app.get('/runkeeper_login', (req, res) ->
 )
 
 app.get('/runkeeper_callback', (req, res) ->
-  console.log('####### callback')
-  console.log(req.param)
-  client.getNewToken(req.param('code'), (access_token) ->
+  console.log('####### callback, with: ' + req.query)
+  client.getNewToken(req.query.code, (access_token) ->
+    console.log('####### access token: ' + access_token)
     req.session.access_token = access_token
     client.access_token      = access_token
     res.redirect('/calendar')
