@@ -24,7 +24,7 @@ viewHelpers =
   formatDateTime: (rkTimeString) ->
     # RunKeeper hands us times like "Tue, 1 Mar 2011 07:00:00"
      # We want to retur ones like "Mar 1, 2011 (Tues) at 1:50PM"
-    moment(rkTimeString).format('MMM d, YYYY (ddd) @ h:mmA')
+    moment(rkTimeString).format('MMM D, YYYY (ddd) @ h:mmA')
   formatTimeDuration: (rkTimeString, seconds) ->
     start = moment(rkTimeString)
     end = start.clone().add('seconds', seconds)
