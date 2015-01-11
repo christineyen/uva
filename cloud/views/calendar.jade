@@ -6,50 +6,51 @@ block content
       .container-fluid
         a.brand(href='/calendar') uva
   .container-fluid
-    .sidebar
-      .well
-        div
-          img.runkeeper-avatar(src=user['medium_picture'])
-          span= user['name'].toUpperCase()
-        h2 Activity Feed
-        p Your activities listed out chronologically, below (just the most recent 25 activities)
-        ul.activities
-          each items, monthName in activities
-            div.monthContainer(class=h.monthToClassName(monthName))
-              each activity in items
-                li
-                  span.label.success= activity['type']
-                  span.distance
-                    strong= h.metersToMi(activity['total_distance'])
-                    |  miles
-                  span.timing
-                    span.duration for #{ h.secondsToHms(activity['duration']) }
-                    |  
-                    span.pace (#{ h.pace(activity['total_distance'], activity['duration'])} min/mi)
-                  span.starttime= h.formatDateTime(activity['start_time'])
-    .content
-      .hero-unit
-        h1 Recent Activities
-        a#showPreviousMonth(href='#') SHOW PREVIOUS MONTHS ^
-        each items, monthName in calData
-          div.monthContainer(class=h.monthToClassName(monthName))
-            h2.month= monthName
-            table.activityCal
-              thead
-                tr
-                  each day in [ 'Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat' ]
-                    th= day
-              tbody
-                each cell, i in items
-                  if i % 7 == 0
-                    tr
-                  td(class=cell.class())
-                    span.day= cell.day
-                    each act in cell.activities()
-                      span.label.success(title=h.cellToolTip(act))= act['type']
-                      // This line makes sure there're spaces between spans
+    .row
+      .sidebar.col-md-3
+        .well
+          div
+            img.runkeeper-avatar(src=user['medium_picture'])
+            span= user['name'].toUpperCase()
+          h2 Activity Feed
+          p Your activities listed out chronologically, below (just the most recent 25 activities)
+          ul.activities
+            each items, monthName in activities
+              div.monthContainer(class=h.monthToClassName(monthName))
+                each activity in items
+                  li
+                    span.label.bg-primary= activity['type']
+                    span.distance
+                      strong= h.metersToMi(activity['total_distance'])
+                      |  miles
+                    span.timing
+                      span.duration for #{ h.secondsToHms(activity['duration']) }
                       |  
-  script(src='/javascripts/jquery.1.6.4.min.js')
-  script(src='/javascripts/bootstrap-twipsy.js')
+                      span.pace (#{ h.pace(activity['total_distance'], activity['duration'])} min/mi)
+                    span.starttime= h.formatDateTime(activity['start_time'])
+      .content.col-md-9
+        .hero-unit
+          h1 Recent Activities
+          a#showPreviousMonth(href='#') SHOW PREVIOUS MONTHS ^
+          each items, monthName in calData
+            div.monthContainer(class=h.monthToClassName(monthName))
+              h2.month= monthName
+              table.activityCal
+                thead
+                  tr
+                    each day in [ 'Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat' ]
+                      th= day
+                tbody
+                  each cell, i in items
+                    if i % 7 == 0
+                      tr
+                    td(class=cell.class())
+                      span.day= cell.day
+                      each act in cell.activities()
+                        span.label.bg-primary(title=h.cellToolTip(act))= act['type']
+                        // This line makes sure there're spaces between spans
+                        |  
+  script(src='https://code.jquery.com/jquery-2.1.3.min.js')
+  script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js')
   script(src='/javascripts/calendar_frontend.js')
   script(type='text/javascript') $(window).load(function() { UVA.cal.init(); })

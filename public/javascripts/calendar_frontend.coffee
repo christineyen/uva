@@ -18,7 +18,7 @@ UVA.cal = (->
     return false
 
   init = ->
-    $('.label.success').twipsy(
+    $('.label.bg-primary').tooltip(
       placement : 'below'
       live      : true
       html      : true

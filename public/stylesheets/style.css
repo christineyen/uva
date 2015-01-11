@@ -67,11 +67,14 @@ a#showPreviousMonth:hover {
   color: #888;
 }
 
+table.activityCal {
+  width: 100%;
+}
 table.activityCal th {
   background-color: #FEFEFE;
 }
 table.activityCal td {
-  height: 3em;
+  height: 4em;
   width: 14%;
 }
 table.activityCal td.inactive {
